@@ -9,9 +9,10 @@ goto ${menu}
 set os Debian
 set debian_mirror deb.elajt.se
 set debian_base_dir debian
+set arch_a amd64
 clear debian_version
 clear older_release
-menu ${os} - ${arch_a} - Image Sig Checks: [${img_sigs_enabled}]
+menu ${os} - ${arch_a} - Image
 item --gap Latest Releases
 item stretch ${space} ${os} 9.0 (stretch)
 item jessie ${space} ${os} 8.0 (jessie)
@@ -79,19 +80,6 @@ imgfree
 echo Boot parameters: ${install_params} -- quiet ${params}
 kernel http://${debian_mirror}/${dir}/linux ${install_params} ${netcfg} ${mirrorcfg} ${console} -- quiet ${params} initrd=initrd.gz
 initrd http://${debian_mirror}/${dir}/initrd.gz
-echo
-echo MD5sums:
-md5sum linux initrd.gz
-iseq ${img_sigs_enabled} true && iseq ${older_release} true && goto skip_sigs ||
-iseq ${img_sigs_enabled} true && goto verify_sigs || goto skip_sigs
-:verify_sigs
-echo
-echo Checking signatures...
-imgverify linux ${sigs}${dir}/linux.sig || goto error
-imgverify initrd.gz ${sigs}${dir}/initrd.gz.sig || goto error
-echo Signatures verified!
-echo
-:skip_sigs
 boot
 
 :debian_exit
