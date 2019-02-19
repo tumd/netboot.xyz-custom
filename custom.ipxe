@@ -9,9 +9,7 @@ menu This is a Test Menu
 item --gap This is the first sub menu
 item stretch ${space} Loading Debian Stretch
 item buster ${space} Loading Debian Buster
-item option_two ${space} Loading an ISO
 item --gap This is a second sub menu
-item option_three ${space} Loads another custom sub menu
 item load_local ${space} Load local menu
 choose custom_choice || goto custom_exit
 echo ${cls}
@@ -19,23 +17,16 @@ goto ${custom_choice}
 goto custom_exit
 
 :stretch
-kernel http://deb.elajt.se/boot/stretch/linux priority=low preseed/url=http://deb.elajt.se/boot/preseed mirror/suite=stretch initrd=initrd.gz
-initrd http://deb.elajt.se/boot/stretch/initrd.gz
+imgfree
+kernel https://deb.elajt.se/boot/stretch/linux auto=true priority=low preseed/url=https://deb.elajt.se/boot/preseed mirror/suite=stretch initrd=initrd.gz
+initrd https://deb.elajt.se/boot/stretch/initrd.gz
 boot || goto custom_exit
 
 :buster
-kernel http://deb.elajt.se/boot/buster/linux priority=low preseed/url=http://deb.elajt.se/boot/preseed mirror/suite=buster initrd=initrd.gz
-initrd http://deb.elajt.se/boot/buster/initrd.gz
+imgfree
+kernel https://deb.elajt.se/boot/buster/linux auto=true priority=low preseed/url=https://deb.elajt.se/boot/preseed mirror/suite=buster initrd=initrd.gz
+initrd https://deb.elajt.se/boot/buster/initrd.gz
 boot || goto custom_exit
-
-:option_two
-kernel https://boot.netboot.xyz/memdisk raw iso
-initrd http://path.to/iso
-boot || goto custom_exit
-
-:option_three
-echo Chains into debian menu...
-chain https://raw.githubusercontent.com/${github_user}/netboot.xyz-custom/master/debian.ipxe || goto custom
 
 :load_local
 echo Loading local menu
